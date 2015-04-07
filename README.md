@@ -7,10 +7,16 @@
 ``` js
 var SourceListMap = require("source-list-map").SourceListMap;
 
+// Create a new map
 var map = new SourceListMap();
+
+// Add generated code that is map line to line to some soure
 map.add("Generated\ncode1\n", "source-code.js", "Orginal\nsource");
+
+// Add generated code that isn't mapped
 map.add("Generated\ncode2\n");
 
+// Get SourceMap and generated source
 map.toStringWithSourceMap({ file: "generated-code.js" });
 // {
 //   source: 'Generated\ncode1\nGenerated\ncode2\n',
@@ -22,24 +28,58 @@ map.toStringWithSourceMap({ file: "generated-code.js" });
 //      mappings: 'AAAA;AACA;;;'
 //    }
 // }
+
+// Convert existing SourceMap into SourceListMap
+// (Only the first mapping per line is preserved)
+var fromStringWithSourceMap = require("source-list-map").fromStringWithSourceMap;
+var map = fromStringWithSourceMap("Generated\ncode", { version: 3, ... });
+
 ```
 
 ### `new SourceListMap()`
 
-### `SourceListMap.prototype.add(generatedCode: string)`
+### `SourceListMap.prototype.add`
 
-### `SourceListMap.prototype.add(generatedCode: string, source: string, originalSource: string)`
+``` js
+SourceListMap.prototype.add(generatedCode: string)
+SourceListMap.prototype.add(generatedCode: string, source: string, originalSource: string)
+SourceListMap.prototype.add(sourceListMap: SourceListMap)
+```
 
-### `SourceListMap.prototype.add(sourceListMap: SourceListMap)`
+Append some stuff.
 
-### `SourceListMap.prototype.prepend(generatedCode: string)`
+### `SourceListMap.prototype.prepend`
 
-### `SourceListMap.prototype.prepend(generatedCode: string, source: string, originalSource: string)`
+``` js
+SourceListMap.prototype.prepend(generatedCode: string)
+SourceListMap.prototype.prepend(generatedCode: string, source: string, originalSource: string)
+SourceListMap.prototype.prepend(sourceListMap: SourceListMap)
+```
 
-### `SourceListMap.prototype.prepend(sourceListMap: SourceListMap)`
+Prepend some stuff.
 
 ### `SourceListMap.prototype.toString()`
 
-### `SourceListMap.prototype.toStringWithSourceMap(options: object)`
+Get generated code.
 
-### `SourceListMap.prototype.mapGeneratedCode(fn: function(generatedCode: string))`
+### `SourceListMap.prototype.toStringWithSourceMap`
+
+``` js
+SourceListMap.prototype.toStringWithSourceMap(options: object)
+```
+
+Get generated code and SourceMap. `options` can contains `file` property which defines the `file` property of the SourceMap.
+
+### `SourceListMap.prototype.mapGeneratedCode`
+
+``` js
+SourceListMap.prototype.mapGeneratedCode(fn: function)
+```
+
+Applies `fn` to each generated code block. The returned value is set as new generated code. The number of lines must not change.
+
+## License
+
+Copyright (c) 2015 Tobias Koppers
+
+MIT (http://www.opensource.org/licenses/mit-license.php)
