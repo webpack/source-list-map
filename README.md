@@ -78,6 +78,10 @@ SourceListMap.prototype.mapGeneratedCode(fn: function)
 
 Applies `fn` to each generated code block. The returned value is set as new generated code. The number of lines must not change.
 
+## Test
+
+[![Build Status](https://travis-ci.org/webpack/source-list-map.svg)](https://travis-ci.org/webpack/source-list-map)
+
 ## License
 
 Copyright (c) 2015 Tobias Koppers
