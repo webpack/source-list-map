@@ -17,7 +17,7 @@ describe("fromStringWithSourceMap", function() {
 			var result = slm.toStringWithSourceMap({
 				file: MAP.file
 			});
-			result.map.should.be.eql(EXPECTED_MAP);
+			JSON.parse(JSON.stringify(result.map)).should.be.eql(EXPECTED_MAP);
 			result.source.should.be.eql(GENERATED_CODE);
 		});
 
