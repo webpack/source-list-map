@@ -17,8 +17,23 @@ describe("fromStringWithSourceMap", function() {
 			var result = slm.toStringWithSourceMap({
 				file: MAP.file
 			});
+			if(result.map.mappings !== EXPECTED_MAP.mappings) {
+				fs.writeFileSync(path.resolve(__dirname, "fixtures/from-to-tests/" + 
+				name.replace(/\.input\.map$/, ".output.map")), JSON.stringify(result.map, null, 2), "utf-8");
+			}
 			JSON.parse(JSON.stringify(result.map)).should.be.eql(EXPECTED_MAP);
+			if(result.source !== GENERATED_CODE) {
+				fs.writeFileSync(path.resolve(__dirname, "fixtures/from-to-tests/" + 
+				path.basename(MAP.file, path.extname(MAP.file)) + ".output" + path.extname(MAP.file)), result.source, "utf-8");
+			}
 			result.source.should.be.eql(GENERATED_CODE);
+
+			slm = fromStringWithSourceMap(GENERATED_CODE, EXPECTED_MAP);
+			result = slm.toStringWithSourceMap({
+				file: MAP.file
+			});
+			result.source.should.be.eql(GENERATED_CODE);
+			JSON.parse(JSON.stringify(result.map)).should.be.eql(EXPECTED_MAP);
 		});
 
 	});
