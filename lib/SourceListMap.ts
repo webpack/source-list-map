@@ -9,12 +9,12 @@ import MappingsContext = require('./MappingsContext');
 type NodeAlias = CodeNode | SourceNode
 
 class SourceListMap {
-    children: (SourceNode|CodeNode|SourceListMap)[]
+    children: (SourceNode | CodeNode | SourceListMap)[]
 
-    constructor(generatedCode: string|SourceNode|CodeNode|SourceListMap, source: string, originalSource: string)
-    constructor(generatedCode: (SourceNode|CodeNode|SourceListMap)[])
+    constructor(generatedCode: string | SourceNode | CodeNode | SourceListMap, source: string, originalSource: string)
+    constructor(generatedCode: (SourceNode | CodeNode | SourceListMap)[])
 
-    constructor(generatedCode, source?, originalSource?) {
+    constructor(generatedCode?, source?, originalSource?) {
         if (Array.isArray(generatedCode)) {
             this.children = generatedCode;
         }
@@ -26,7 +26,7 @@ class SourceListMap {
         }
     }
 
-    add(generatedCode: string|CodeNode|SourceNode|SourceListMap, source: string, originalSource: string) {
+    add(generatedCode: string | CodeNode | SourceNode | SourceListMap, source?: string, originalSource?: string) {
         if (typeof generatedCode === 'string') {
             if (source) {
                 this.children.push(new SourceNode(generatedCode, source, originalSource));
@@ -51,7 +51,7 @@ class SourceListMap {
         }
     }
 
-    prepend(generatedCode: SourceListMap|SourceNode|CodeNode, source?: string, originalSource?: string) {
+    prepend(generatedCode: SourceListMap | SourceNode | CodeNode, source?: string, originalSource?: string) {
         if (typeof generatedCode === 'string') {
             if (source) {
                 this.children.unshift(new SourceNode(generatedCode, source, originalSource));
