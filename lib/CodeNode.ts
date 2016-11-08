@@ -17,7 +17,7 @@ class CodeNode {
         return this.generatedCode;
     }
 
-    getMappings(mappingsContext?: MappingsContext) {
+    getMappings(mappingsContext: MappingsContext) {
         const lines = getNumberOfLines(this.generatedCode);
         return Array(lines + 1).join(';');
     }

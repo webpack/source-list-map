@@ -9,10 +9,10 @@ import MappingsContext = require('./MappingsContext');
 type NodeAlias = CodeNode | SourceNode
 
 class SourceListMap {
-    children: (SourceNode | CodeNode | SourceListMap)[]
+    children: (SourceNode | CodeNode)[]
 
     constructor(generatedCode: string | SourceNode | CodeNode | SourceListMap, source: string, originalSource: string)
-    constructor(generatedCode: (SourceNode | CodeNode | SourceListMap)[])
+    constructor(generatedCode: (SourceNode | CodeNode)[])
 
     constructor(generatedCode?, source?, originalSource?) {
         if (Array.isArray(generatedCode)) {
@@ -29,7 +29,7 @@ class SourceListMap {
     add(generatedCode: string | CodeNode | SourceNode | SourceListMap, source?: string, originalSource?: string) {
         if (typeof generatedCode === 'string') {
             if (source) {
-                this.children.push(new SourceNode(generatedCode, source, originalSource));
+                this.children.push(new SourceNode(generatedCode, source, originalSource as string));
             }
             else if (this.children.length > 0 && (<CodeNode>this.children[this.children.length - 1]).addGeneratedCode) {
                 (<CodeNode>this.children[this.children.length - 1]).addGeneratedCode(generatedCode);
@@ -39,7 +39,7 @@ class SourceListMap {
             }
         }
         else if ((<NodeAlias>generatedCode).getMappings && (<NodeAlias>generatedCode).getGeneratedCode) {
-            this.children.push(generatedCode);
+            this.children.push(<NodeAlias>generatedCode);
         }
         else if ((<SourceListMap>generatedCode).children) {
             (<SourceListMap>generatedCode).children.forEach(function (sln) {
@@ -54,17 +54,17 @@ class SourceListMap {
     prepend(generatedCode: SourceListMap | SourceNode | CodeNode, source?: string, originalSource?: string) {
         if (typeof generatedCode === 'string') {
             if (source) {
-                this.children.unshift(new SourceNode(generatedCode, source, originalSource));
+                this.children.unshift(new SourceNode(generatedCode, source, originalSource as string));
             }
-            else if (this.children.length > 0 && (<SourceListMap>this.children[this.children.length - 1]).prepend) {
-                (<SourceListMap>this.children[this.children.length - 1]).prepend(generatedCode);
+            else if (this.children.length > 0 && this.children[this.children.length - 1].preprendGeneratedCode) {
+                this.children[this.children.length - 1].preprendGeneratedCode(generatedCode);
             }
             else {
                 this.children.unshift(new CodeNode(generatedCode));
             }
         }
         else if ((<NodeAlias>generatedCode).getMappings && (<NodeAlias>generatedCode).getGeneratedCode) {
-            this.children.unshift(generatedCode);
+            this.children.unshift(<NodeAlias>generatedCode);
         }
         else if ((<SourceListMap>generatedCode).children) {
             (<SourceListMap>generatedCode).children.slice().reverse().forEach(function (sln) {
@@ -88,12 +88,17 @@ class SourceListMap {
         ).join('');
     }
 
-    toStringWithSourceMap(options: {
-        file: any
-    }) {
+    toStringWithSourceMap(
+        options: {
+            file: any
+        }
+    ) {
         const mappingsContext = new MappingsContext();
         const source = this.children.map((sln: NodeAlias) => sln.generatedCode).join('');
-        const mappings = this.children.map((sln: NodeAlias) => sln.getMappings(mappingsContext)).join('');
+        const mappings = this.children.map((sln: NodeAlias) =>
+                sln.getMappings(mappingsContext)
+            )
+            .join('');
         return {
             source,
             map: {

@@ -11,17 +11,17 @@ import SourceListMap = require('./SourceListMap');
 export = function fromStringWithSourceMap(
     code: string,
     map: {
-        sources
-        sourcesContent
-        mappings
+        sources: (string | SourceNode | CodeNode) []
+        sourcesContent: string[]
+        mappings: string
     }
 ) {
     const sources = map.sources;
     const sourcesContent = map.sourcesContent;
     const mappings = map.mappings.split(';');
     const lines = code.split('\n');
-    const nodes = [];
-    let currentNode = null;
+    const nodes: (CodeNode | SourceNode)[] = [];
+    let currentNode: CodeNode | SourceNode;
     let currentLine = 1;
     let currentSourceIdx = 0;
     let currentSourceNodeLine;
@@ -36,9 +36,9 @@ export = function fromStringWithSourceMap(
         if (!mapping) {
             return addCode(line);
         }
-        mapping = { value: 0, rest: mapping };
+        const mappingObj = { value: 0, rest: mapping };
         let lineAdded = false;
-        while (mapping.rest) lineAdded = processMapping(mapping, line, lineAdded) || lineAdded;
+        while (mappingObj.rest) lineAdded = processMapping(mappingObj, line, lineAdded) || lineAdded;
         if (!lineAdded) {
             addCode(line);
         }
@@ -52,6 +52,7 @@ export = function fromStringWithSourceMap(
         addCode(lines.slice(idx).join('\n'));
     }
     return new SourceListMap(nodes);
+
     function processMapping(mapping, line, ignore) {
         if (mapping.rest && mapping.rest[0] !== ',') {
             base64VLQ.decode(mapping.rest, mapping);
@@ -84,15 +85,18 @@ export = function fromStringWithSourceMap(
         }
 
         if (!ignore) {
-            addSource(line, sources ? sources[sourceIdx] : null, sourcesContent
-                ? sourcesContent[sourceIdx]
-                : null, linePosition);
+            addSource(
+                line,
+                sources ? sources[sourceIdx] : null,
+                sourcesContent ? sourcesContent[sourceIdx] : null,
+                linePosition
+            );
             return true;
         }
     }
 
     function addCode(generatedCode) {
-        if (currentNode && currentNode instanceof CodeNode) {
+        if (currentNode && (currentNode instanceof CodeNode)) {
             currentNode.addGeneratedCode(generatedCode);
         }
         else if (currentNode && currentNode instanceof SourceNode && !generatedCode.trim()) {
