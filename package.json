@@ -14,6 +14,7 @@
   "keywords": [
     "source-map"
   ],
+  "files": ["lib"],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/webpack/source-list-map/issues"
