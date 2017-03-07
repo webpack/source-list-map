@@ -1,6 +1,6 @@
 {
   "name": "source-list-map",
-  "version": "0.1.8",
+  "version": "1.0.0",
   "description": "Fast line to line SourceMap generator.",
   "author": "Tobias Koppers @sokra",
   "main": "lib/index.js",
