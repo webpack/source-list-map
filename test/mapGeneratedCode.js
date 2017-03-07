@@ -1,6 +1,4 @@
 var should = require("should");
-var fs = require("fs");
-var path = require("path");
 var SourceListMap = require("../").SourceListMap;
 
 describe("mapGeneratedCode", function() {
@@ -51,9 +49,8 @@ describe("mapGeneratedCode", function() {
 			expectedPart,
 			"AAfA",
 			expectedPart,
-			"AACA",
-			expectedPart,
-			"AA/BA",
+			";;;;;;;;;;;",
+			"AAfA",
 			expectedPart
 		].join(";"));
 		result.source.should.be.eql(
