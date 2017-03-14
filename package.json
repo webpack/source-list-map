@@ -24,6 +24,7 @@
   "homepage": "https://github.com/webpack/source-list-map",
   "devDependencies": {
     "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "should": "^5.2.0",
+    "standard-version": "^4.0.0"
   }
 }
