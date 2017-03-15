@@ -5,7 +5,8 @@
   "author": "Tobias Koppers @sokra",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
