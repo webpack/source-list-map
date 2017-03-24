@@ -63,7 +63,9 @@ describe("mapGeneratedCode", function() {
 		var source = bigString + "MyLine\n" + bigString;
 		var map = new SourceListMap();
 		map.add(source, "file.txt", source);
-		var newMap = map.mapGeneratedCode(line => line);
+		var newMap = map.mapGeneratedCode(function(line) {
+			return line;
+		});
 		var result = newMap.toStringWithSourceMap({ file: "test.txt" });
 		result.source.should.be.eql(source);
 		result.map.sourcesContent[0].should.be.eql(source);
