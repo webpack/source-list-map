@@ -5,7 +5,8 @@
   "author": "Tobias Koppers @sokra",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha -R spec"
+    "test": "mocha -R spec",
+    "build": "tsc -p . || true"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
   "homepage": "https://github.com/webpack/source-list-map",
   "devDependencies": {
     "mocha": "^2.2.1",
-    "should": "^5.2.0"
+    "should": "^5.2.0",
+    "tslint": "^3.15.1",
+    "typescript": "^2.0.6"
   }
 }
