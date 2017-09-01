@@ -11,7 +11,7 @@ var SourceListMap = require("source-list-map").SourceListMap;
 var map = new SourceListMap();
 
 // Add generated code that is map line to line to some soure
-map.add("Generated\ncode1\n", "source-code.js", "Orginal\nsource");
+map.add("Generated\ncode1\n", "source-code.js", "Orignal\nsource");
 
 // Add generated code that isn't mapped
 map.add("Generated\ncode2\n");
